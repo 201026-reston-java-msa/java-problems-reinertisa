@@ -1,5 +1,6 @@
 package com.revature.eval.java.core;
 
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,12 +157,16 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 
+		
+		
 		if(string == null || string.length() == 0) {
 			return 0;
 		}
 		
 		
 		HashMap<Character, Integer> letters = new HashMap<>();
+		
+		
 		letters.put('A', 1);
 		letters.put('E', 1);
 		letters.put('I', 1);
@@ -247,12 +252,7 @@ public class EvaluationService {
 			return null;
 		}
 
-		
-		string = string.replaceAll("[.]", "");
-		string = string.replaceAll("[ ]", "");
-		string = string.replaceAll("[(]", "");
-		string = string.replaceAll("[)]", "");
-		string = string.replaceAll("[-]", "");	
+		string = string.replaceAll("[. ()-]+", "");
 		
 		
 		StringBuilder sb = new StringBuilder();
@@ -351,14 +351,30 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T>{
+	static class BinarySearch<T extends Comparable<T>>{
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
+			
+			int left = 0;
+			int right = sortedList.size()-1;
+			
+			while(left <= right) {
+				int mid = (right - left) / 2 + left;
+				
+				T midVal = sortedList.get(mid);
+				
+				if(t.compareTo(midVal) == 0) {
+					return mid;
+				} else if(t.compareTo(midVal) < 0) {
+					right = mid - 1;
+				} else {
+					left = mid + 1;
+				}
+			}
 	
 			return 0;
 		}
-
 
 		public BinarySearch(List<T> sortedList) {
 			super();
@@ -888,7 +904,7 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
+		
 		return null;
 	}
 
@@ -973,7 +989,7 @@ public class EvaluationService {
 		}
 		
 		String str = string.replaceAll(" ", "");
-		System.out.println(str);
+		
 		
 		int i = str.length()-1;
 		int count = 1;
